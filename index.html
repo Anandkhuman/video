@@ -96,7 +96,7 @@
         }
 
         /* Styling for the hidden video */
-        iframe {
+        video {
             display: none;
             width: 100%;
             height: 315px;
@@ -125,8 +125,11 @@
     <p class="success" id="successMessage">Password correct! Enjoy the video.</p>
     <p class="attempts">Attempts remaining: <span id="remainingAttempts">3</span></p>
 
-    <!-- YouTube Video Embed -->
-    <iframe id="videoPlayer" src="https://www.youtube.com/embed/o5HbFCNaKPk?si=rvvUnOIyOPnMN-sj" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <!-- Video Embed from GitHub or other URL -->
+    <video id="videoPlayer" controls>
+        <source src="https://github.com/Anandkhuman/video/blob/main/video.mp4?raw=true" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 </div>
 
 <script>
