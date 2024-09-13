@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .contact-info {
+            margin-bottom: 30px;
+        }
+        .contact-info p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+        .contact-info p strong {
+            color: #333;
+        }
+        .contact-info a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .contact-form input, .contact-form textarea {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .contact-form button {
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .contact-form input, .contact-form textarea {
+                font-size: 14px;
+            }
+            .contact-form button {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Contact Us</h1>
+
+    <div class="contact-info">
+        <p>If you have any questions or need assistance, please reach out to us through the following contact details:</p>
+        <p><strong>Contact Number:</strong> <a href="tel:+9089988921">9089988921</a></p>
+        <p><strong>WhatsApp Number:</strong> <a href="https://wa.me/9089988921" target="_blank">9089988921</a></p>
+        <p><strong>Email:</strong> <a href="mailto:anandkhuman143@gmail.com">anandkhuman143@gmail.com</a></p>
+    </div>
+
+    <form class="contact-form" onsubmit="sendMessage(event)">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Your Message:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Send Message</button>
+    </form>
+</div>
+
+<script>
+    function sendMessage(event) {
+        event.preventDefault();  // Prevents the form from submitting the default way
+
+        // Collect form data
+        const name = encodeURIComponent(document.getElementById('name').value);
+        const email = encodeURIComponent(document.getElementById('email').value);
+        const message = encodeURIComponent(document.getElementById('message').value);
+        
+        // WhatsApp API URL
+        const phoneNumber = '9089988921'; // Your WhatsApp number without country code
+        const whatsappMessage = `Hello, I am ${name}.%0AEmail: ${email}%0AMessage: ${message}`;
+        const url = `https://wa.me/${phoneNumber}?text=${whatsappMessage}`;
+
+        // Open WhatsApp chat with pre-filled message
+        window.open(url, '_blank');
+    }
+</script>
+
+</body>
+</html>
