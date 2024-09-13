@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Video Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+        iframe {
+            display: none;
+            width: 100%;
+            height: 315px;
+            margin-top: 20px;
+        }
+        input[type="password"] {
+            padding: 10px;
+            width: 80%;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+            display: none;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .warning {
+            color: orange;
+            margin-top: 10px;
+            display: none;
+        }
+        .attempts {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Protected Video Player</h2>
+    <p>Please enter the password to access the video:</p>
+    <input type="password" id="password" placeholder="Enter password">
+    <br>
+    <button onclick="checkPassword()">Submit</button>
+    <button onclick="refreshPage()">Refresh</button>
+    <p class="error" id="errorMessage">Incorrect password. Try again.</p>
+    <p class="warning" id="warningMessage">Too many attempts! Redirecting to admin page <span id="countdown">10</span> seconds...</p>
+    <p class="attempts" id="attemptsMessage">Attempts remaining: <span id="remainingAttempts">3</span></p>
+
+    <!-- YouTube Video Embed -->
+    <iframe id="videoPlayer" src="https://www.youtube.com/embed/o5HbFCNaKPk?si=rvvUnOIyOPnMN-sj" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<script>
+    const correctPassword = "526263";
+    let attempts = 0;
+    let countdownInterval;
+    const maxAttempts = 3;
+
+    function checkPassword() {
+        const inputPassword = document.getElementById("password").value;
+        const videoPlayer = document.getElementById("videoPlayer");
+        const errorMessage = document.getElementById("errorMessage");
+        const warningMessage = document.getElementById("warningMessage");
+        const countdownElement = document.getElementById("countdown");
+        const remainingAttemptsElement = document.getElementById("remainingAttempts");
+
+        if (inputPassword === correctPassword) {
+            // Correct password, show video and hide error message
+            videoPlayer.style.display = "block";
+            errorMessage.style.display = "none";
+            warningMessage.style.display = "none";
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        } else {
+            // Wrong password, increment attempts
+            attempts++;
+            const remainingAttempts = maxAttempts - attempts;
+            remainingAttemptsElement.textContent = remainingAttempts;
+            errorMessage.style.display = "block";
+            errorMessage.style.animation = "shake 0.5s"; // Add shake animation
+
+            if (attempts >= maxAttempts) {
+                // Start countdown and show warning message
+                warningMessage.style.display = "block";
+                let countdown = 10; // Countdown time in seconds
+                countdownElement.textContent = countdown;
+
+                countdownInterval = setInterval(function() {
+                    countdown--;
+                    countdownElement.textContent = countdown;
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        window.location.href = "contact.html";
+                    }
+                }, 1000);
+            }
+        }
+    }
+
+    function refreshPage() {
+        location.reload();  // Reloads the current page
+    }
+</script>
+
+</body>
+</html>
