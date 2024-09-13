@@ -25,42 +25,112 @@
             display: none;
             width: 100%;
             height: 315px;
-            margin-top: 20px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Video Player</title>
+    <style>
+        /* Basic styling for the page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
         }
+
+        /* Container for the video player and form */
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Heading style */
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Password input field styling */
         input[type="password"] {
-            padding: 10px;
-            width: 80%;
-            margin: 10px 0;
+            padding: 12px;
+            width: 100%;
+            margin: 15px 0;
             font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
         }
+
+        /* Buttons styling */
         button {
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 16px;
             cursor: pointer;
             margin: 5px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007BFF;
+            color: #fff;
+            transition: background-color 0.3s ease;
         }
-        .error {
-            color: red;
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Error, warning, and success messages */
+        .error, .warning, .attempts, .success {
             margin-top: 10px;
-            display: none;
-            animation: shake 0.5s;
+            font-size: 14px;
         }
+
+        .error {
+            color: #FF3E3E;
+            display: none;
+        }
+
+        .warning {
+            color: orange;
+            display: none;
+        }
+
+        .success {
+            color: green;
+            display: none;
+        }
+
+        .attempts {
+            font-size: 16px;
+            color: #333;
+            margin-top: 15px;
+        }
+
+        /* Add shake animation for incorrect password */
         @keyframes shake {
-            0% { transform: translateX(0); }
+            0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
             50% { transform: translateX(5px); }
             75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
         }
-        .warning {
-            color: orange;
-            margin-top: 10px;
+
+        /* Styling for the hidden video */
+        iframe {
             display: none;
+            width: 100%;
+            height: 315px;
+            margin-top: 20px;
+            border-radius: 12px;
         }
-        .attempts {
-            font-size: 16px;
-            margin-top: 10px;
-        }
+
     </style>
 </head>
 <body>
@@ -68,54 +138,72 @@
 <div class="container">
     <h2>Protected Video Player</h2>
     <p>Please enter the password to access the video:</p>
+    
     <input type="password" id="password" placeholder="Enter password">
-    <br>
-    <button onclick="checkPassword()">Submit</button>
-    <button onclick="refreshPage()">Refresh</button>
+    
+    <div>
+        <button onclick="checkPassword()">Submit</button>
+        <button onclick="refreshPage()">Refresh</button>
+    </div>
+    
+    <!-- Error, Success, and Warning Messages -->
     <p class="error" id="errorMessage">Incorrect password. Try again.</p>
-    <p class="warning" id="warningMessage">Too many attempts! Redirecting to admin page <span id="countdown">10</span> seconds...</p>
-    <p class="attempts" id="attemptsMessage">Attempts remaining: <span id="remainingAttempts">3</span></p>
+    <p class="warning" id="warningMessage">Too many attempts! Redirecting to admin page in <span id="countdown">10</span> seconds...</p>
+    <p class="success" id="successMessage">Password correct! Enjoy the video.</p>
+    <p class="attempts">Attempts remaining: <span id="remainingAttempts">3</span></p>
 
     <!-- YouTube Video Embed -->
     <iframe id="videoPlayer" src="https://www.youtube.com/embed/o5HbFCNaKPk?si=rvvUnOIyOPnMN-sj" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 <script>
-    const correctPassword = "526263";
-    let attempts = 0;
+    const correctPassword = "526263";  // Password protection
+    let attempts = 0;  // Track number of attempts
+    const maxAttempts = 3;  // Max attempts allowed
     let countdownInterval;
-    const maxAttempts = 3;
 
     function checkPassword() {
         const inputPassword = document.getElementById("password").value;
         const videoPlayer = document.getElementById("videoPlayer");
         const errorMessage = document.getElementById("errorMessage");
         const warningMessage = document.getElementById("warningMessage");
+        const successMessage = document.getElementById("successMessage");
         const countdownElement = document.getElementById("countdown");
         const remainingAttemptsElement = document.getElementById("remainingAttempts");
 
+        // Check if password is correct
         if (inputPassword === correctPassword) {
-            // Correct password, show video and hide error message
-            videoPlayer.style.display = "block";
-            errorMessage.style.display = "none";
-            warningMessage.style.display = "none";
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
+            videoPlayer.style.display = "block";  // Show video
+            errorMessage.style.display = "none";  // Hide error message
+            warningMessage.style.display = "none";  // Hide warning if applicable
+            successMessage.style.display = "block";  // Show success message
+
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.display = "none";
+            }, 3000);
+
+            clearInterval(countdownInterval);  // Clear countdown if started
         } else {
-            // Wrong password, increment attempts
             attempts++;
             const remainingAttempts = maxAttempts - attempts;
             remainingAttemptsElement.textContent = remainingAttempts;
+
+            // Reset animation before triggering it again
+            errorMessage.style.animation = "none";
+            setTimeout(() => {
+                errorMessage.style.animation = "shake 0.5s";  // Trigger shake animation
+            }, 10);
+
+            // Show error message
             errorMessage.style.display = "block";
-            errorMessage.style.animation = "shake 0.5s"; // Add shake animation
 
             if (attempts >= maxAttempts) {
-                // Start countdown and show warning message
+                // Lockout and start countdown to redirect
                 warningMessage.style.display = "block";
-                let countdown = 10; // Countdown time in seconds
+                let countdown = 10;
                 countdownElement.textContent = countdown;
-
+                
                 countdownInterval = setInterval(function() {
                     countdown--;
                     countdownElement.textContent = countdown;
@@ -128,8 +216,9 @@
         }
     }
 
+    // Refresh the page
     function refreshPage() {
-        location.reload();  // Reloads the current page
+        location.reload();
     }
 </script>
 
